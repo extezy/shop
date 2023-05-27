@@ -9,7 +9,7 @@ class Category(models.Model):
     slug = models.SlugField(max_length=200, db_index=True, unique=True)
 
     sub_category = models.ForeignKey(
-        'self', on_delete=models.CASCADE,
+        'self', on_delete=models.PROTECT,
         related_name='sub_categories', null=True, blank=True
     )
     is_sub = models.BooleanField(default=False)
@@ -32,7 +32,7 @@ class Product(models.Model):
     """Goods in the store"""
     name = models.CharField(max_length=200, db_index=True)
     slug = models.SlugField(max_length=200, db_index=True)
-    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
+    category = models.ForeignKey(Category, on_delete=models.PROTECT, related_name='products')
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
     price = models.DecimalField(max_digits=10, decimal_places=2)
