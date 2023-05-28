@@ -14,3 +14,9 @@ class Client(models.Model):
     age = models.PositiveSmallIntegerField()
     phone = PhoneNumberField()
     full_address = models.CharField(max_length=100)
+
+    class Meta:
+        ordering = ('user',)
+
+    def __str__(self):
+        return f'{self.user.first_name} {self.user.last_name}'
