@@ -6,5 +6,5 @@ from clients.serializers import ClientSerializer
 
 
 class ClientView(ReadOnlyModelViewSet):
-    queryset = Client.objects.all()
+    queryset = Client.objects.all().prefetch_related('user')
     serializer_class = ClientSerializer
