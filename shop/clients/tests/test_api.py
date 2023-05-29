@@ -9,14 +9,15 @@ from clients.serializers import ClientSerializer
 
 class ClientsApiTestCase(APITestCase):
     def test_get(self):
-        user_1 = User.objects.create_user(username='manson',email='manson@google.com', first_name='Vasya', last_name='Entrop')
+        user_1 = User.objects.create_user(username='manson', email='manson@google.com', first_name='Vasya',
+                                          last_name='Entrop')
         client_1 = Client.objects.create(user=user_1, gender='M', age=27, phone='+75642185479', full_address='Moscow')
 
-        user_2 = User.objects.create_user(username='sara', email='sara@google.com', first_name='Sara', last_name='Maddison')
+        user_2 = User.objects.create_user(username='sara', email='sara@google.com', first_name='Sara',
+                                          last_name='Maddison')
         client_2 = Client.objects.create(user=user_2, gender='F', age=30, phone='+72657841598', full_address='Paris')
 
         url = reverse('client-list')
-        print(url)
         response = self.client.get(url)
         serializer_data = ClientSerializer([client_1, client_2], many=True).data
 

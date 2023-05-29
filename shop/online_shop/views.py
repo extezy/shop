@@ -6,5 +6,12 @@ from online_shop.serializers import ProductSerializer
 
 
 class ProductView(ReadOnlyModelViewSet):
-    queryset = Product.objects.all().prefetch_related('category')
+    queryset = Product.objects.all().select_related('category').only('id',
+                                                                     'name',
+                                                                     'category__name',
+                                                                     'image',
+                                                                     'description',
+                                                                     'price',
+                                                                     'stock',
+                                                                     'available')
     serializer_class = ProductSerializer
