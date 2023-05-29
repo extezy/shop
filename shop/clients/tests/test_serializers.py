@@ -18,10 +18,8 @@ class ClientSerializerTestCase(TestCase):
         expected_data = [
             {
                 'id': client_1.id,
-                'client_name': {
-                    'first_name': 'Vasya',
-                    'last_name': 'Entrop'
-                },
+                'first_name': 'Vasya',
+                'last_name': 'Entrop',
                 'gender': 'M',
                 'age': 27,
                 'phone': '+75642185479',
@@ -29,10 +27,8 @@ class ClientSerializerTestCase(TestCase):
             },
             {
                 'id': client_2.id,
-                'client_name': {
-                    'first_name': 'Sara',
-                    'last_name': 'Maddison'
-                },
+                'first_name': 'Sara',
+                'last_name': 'Maddison',
                 'gender': 'F',
                 'age': 30,
                 'phone': '+72657841598',
