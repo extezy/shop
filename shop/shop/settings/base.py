@@ -18,6 +18,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # Other apps
     'phonenumber_field',
+    'django_filters',
     # Local apps
     'clients',
     'online_shop',
