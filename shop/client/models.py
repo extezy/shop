@@ -9,7 +9,7 @@ class Client(models.Model):
         ('F', 'Female'),
     )
 
-    user = models.OneToOneField(User, on_delete=models.PROTECT)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
     age = models.PositiveSmallIntegerField()
     phone = PhoneNumberField()

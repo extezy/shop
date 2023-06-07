@@ -1,7 +1,7 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from clients.models import Client
-from clients.serializers import ClientSerializer
+from client.models import Client
+from client.serializers import ClientSerializer
 
 
 class ClientSerializerTestCase(TestCase):

@@ -17,10 +17,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Other apps
+    'rest_framework',
+    'rest_framework.authtoken',
     'phonenumber_field',
     'django_filters',
     # Local apps
-    'clients',
+    'client',
     'online_shop',
 ]
 
@@ -54,8 +56,18 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'shop.wsgi.application'
 
-# AUTH_USER_MODEL = "clients.User"
+REST_FRAMEWORK = {
 
+    'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication'
+    ],
+}
 
 AUTH_PASSWORD_VALIDATORS = [
     {
@@ -71,7 +83,6 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
-
 
 LANGUAGE_CODE = 'en-us'
 

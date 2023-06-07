@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 from online_shop.models import Category, Product
 from online_shop.serializers import ProductSerializer
@@ -22,7 +24,9 @@ class ProductSerializerTestCase(TestCase):
             {
                 'id': product_1.id,
                 'name': 'Toothpaste',
-                'category': 'Bathroom',
+                'category': {
+                    'name': 'Bathroom',
+                },
                 'image': None,
                 'description': 'Paste for tooth',
                 'price': '5.00',
@@ -32,7 +36,9 @@ class ProductSerializerTestCase(TestCase):
             {
                 'id': product_2.id,
                 'name': 'Towel',
-                'category': 'Kitchen',
+                'category': {
+                    'name': 'Kitchen'
+                },
                 'image': None,
                 'description': 'Hand towel',
                 'price': '2.00',
@@ -40,5 +46,5 @@ class ProductSerializerTestCase(TestCase):
                 'available': True
             }
         ]
-
-        self.assertEqual(expected_data, data)
+        # TODO don't work, with category inside
+        self.assertEqual(expected_data, json.dumps(data))
