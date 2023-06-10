@@ -47,4 +47,8 @@ def api_root(request, format=None):
     return Response({
         'product': reverse('product-list', request=request, format=format),
         'clients': reverse('client-list', request=request, format=format),
+        'cart': reverse('cart-list', request=request, format=format),
+        'reset_cart': reverse('reset-list', request=request, format=format),
+        'add_cart_product': reverse('product-add-list', request=request, format=format),
+        'remove_cart_product': reverse('product-remove-list', request=request, format=format),
     })
