@@ -1,3 +1,5 @@
+import json
+
 from django.test import TestCase
 from online_shop.models import Category, Product
 from online_shop.serializers import ProductSerializer
@@ -20,25 +22,35 @@ class ProductSerializerTestCase(TestCase):
 
         expected_data = [
             {
-                'id': product_1.id,
-                'name': 'Toothpaste',
-                'category': 'Bathroom',
-                'image': None,
-                'description': 'Paste for tooth',
-                'price': '5.00',
-                'stock': 5,
-                'available': True
+                "id": 1,
+                "name": "Toothpaste",
+                "category": {
+                    "name": "Bathroom",
+                    "slug": "bathroom",
+                    "sub_category": None,
+                    "is_sub": False
+                },
+                "image": None,
+                "description": "Paste for tooth",
+                "price": "5.00",
+                "stock": 5,
+                "available": True
             },
             {
-                'id': product_2.id,
-                'name': 'Towel',
-                'category': 'Kitchen',
-                'image': None,
-                'description': 'Hand towel',
-                'price': '2.00',
-                'stock': 15,
-                'available': True
+                "id": 2,
+                "name": "Towel",
+                "category": {
+                    "name": "Kitchen",
+                    "slug": "kitchen",
+                    "sub_category": None,
+                    "is_sub": False
+                },
+                "image": None,
+                "description": "Hand towel",
+                "price": "2.00",
+                "stock": 15,
+                "available": True
             }
         ]
 
-        self.assertEqual(expected_data, data)
+        self.assertEqual(json.dumps(expected_data), json.dumps(data))

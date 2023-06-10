@@ -1,12 +1,25 @@
 from rest_framework import serializers
 
-from online_shop.models import Product
+from online_shop.models import Product, Category
+
+
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Category
+        fields = ('name', 'slug', 'sub_category', 'is_sub')
 
 
 class ProductSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source='category.name')
+    category = CategorySerializer(required=False)
 
     class Meta:
         model = Product
         fields = ('id', 'name', 'category', 'image',
-                  'description', 'price', 'stock', 'available')
+                  'description', 'price', 'stock',
+                  'available')
+
+    def create(self, validated_data):
+        category_data = validated_data.pop('category')
+        category, created = Category.objects.get_or_create(**category_data)
+        product = Product.objects.create(**validated_data, category=category)
+        return product

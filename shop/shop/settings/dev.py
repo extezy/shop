@@ -9,6 +9,7 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
+        # "ATOMIC_REQUESTS": True,
     }
 }
 
@@ -25,7 +26,7 @@ LOGGING = {
     }
 }
 
-REST_FRAMEWORK = {
+REST_FRAMEWORK.update({
     'DEFAULT_RENDERER_CLASSES': (
         'rest_framework.renderers.JSONRenderer',
     ),
@@ -33,3 +34,4 @@ REST_FRAMEWORK = {
         'rest_framework.parsers.JSONParser',
     )
 }
+)
