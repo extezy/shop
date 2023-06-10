@@ -1,9 +1,9 @@
 import environ
 from pathlib import Path
 
-root = environ.Path(__file__) - 3
+root = environ.Path(__file__) - 4
 env = environ.Env()
-environ.Env.read_env()
+environ.Env.read_env(root('.env'))
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -97,7 +97,7 @@ USE_L10N = True
 
 USE_TZ = True
 
-public_root = root.path('public/')
+public_root = root.path('/shop/public/')
 MEDIA_ROOT = public_root('media')
 MEDIA_URL = env.str('MEDIA_URL', default='media/')
 STATIC_ROOT = public_root('static')

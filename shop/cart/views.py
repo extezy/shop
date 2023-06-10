@@ -32,7 +32,7 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
 
 class CartResetView(CreateModelMixin, GenericViewSet):
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.all().select_related('ProductCart')
     serializer_class = CartSerializer
     permission_classes = [AllowAny, ]
 
