@@ -2,12 +2,12 @@ from django_filters.rest_framework import DjangoFilterBackend
 
 from rest_framework.filters import SearchFilter, OrderingFilter
 from rest_framework.viewsets import ModelViewSet
-
+from rest_framework.permissions import AllowAny
 from online_shop.models import Product, Category
 from online_shop.permissions import IsStaffOrAdminOrReadOnly
 from online_shop.serializers import ProductSerializer, CategorySerializer
 
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
@@ -42,6 +42,7 @@ class ProductView(ModelViewSet):
 
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def api_root(request, format=None):
     """Root api point"""
     return Response({
