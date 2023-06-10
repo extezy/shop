@@ -31,7 +31,7 @@ class ClientsApiTestCase(APITestCase):
         self.assertEqual(response.data.get('token'), str(self.user_2.auth_token))
 
         api_client.credentials(HTTP_AUTHORIZATION=f'Token {self.user_2.auth_token}')
-        response = api_client.post('/api/token/logout/', {'Authorization': self.user_2.auth_token})
+        response = api_client.post('/api/token/logout/', {'Authorization': f'{self.user_2.auth_token}'})
         self.assertEqual({'Message': 'You are logged out'}, response.data)
 
     def test_basic_authenticate(self):

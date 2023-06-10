@@ -17,10 +17,10 @@ class CategoryView(ModelViewSet):
 
     serializer_class = CategorySerializer
     filter_backends = [DjangoFilterBackend, SearchFilter, OrderingFilter]
-    filterset_fields = ['is_sub',]
+    filterset_fields = ['is_sub', ]
     search_fields = ['name', 'sub_category']
-    ordering_fields = ['name',]
-    permission_classes = [IsStaffOrAdminOrReadOnly,]
+    ordering_fields = ['name', ]
+    permission_classes = [IsStaffOrAdminOrReadOnly, ]
 
 
 class ProductView(ModelViewSet):
@@ -38,7 +38,7 @@ class ProductView(ModelViewSet):
     filterset_fields = ['price', 'category__name', 'available']
     search_fields = ['name', 'description']
     ordering_fields = ['price', 'stock']
-    permission_classes = [IsStaffOrAdminOrReadOnly,]
+    permission_classes = [IsStaffOrAdminOrReadOnly, ]
 
 
 @api_view(['GET'])

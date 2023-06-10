@@ -9,22 +9,22 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
-        "ATOMIC_REQUESTS": True,
+        # "ATOMIC_REQUESTS": True,
     }
 }
 
-# LOGGING = {
-#     'version': 1,
-#     'handlers': {
-#         'console': {'class': 'logging.StreamHandler'}
-#     },
-#     'loggers': {
-#         'django.db.backends': {
-#             'handlers': ['console'],
-#             'level': 'DEBUG'
-#         }
-#     }
-# }
+LOGGING = {
+    'version': 1,
+    'handlers': {
+        'console': {'class': 'logging.StreamHandler'}
+    },
+    'loggers': {
+        'django.db.backends': {
+            'handlers': ['console'],
+            'level': 'DEBUG'
+        }
+    }
+}
 
 REST_FRAMEWORK.update({
     'DEFAULT_RENDERER_CLASSES': (

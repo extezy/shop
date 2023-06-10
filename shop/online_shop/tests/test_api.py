@@ -4,9 +4,8 @@ from django.urls import reverse
 from rest_framework import status
 import json
 from django.contrib.auth.models import User
-from shop import settings
 
-from online_shop.serializers import ProductSerializer, CategorySerializer
+from online_shop.serializers import ProductSerializer
 
 
 class ProductApiTestCase(APITestCase):

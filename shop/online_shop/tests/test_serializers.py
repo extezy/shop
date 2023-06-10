@@ -22,29 +22,35 @@ class ProductSerializerTestCase(TestCase):
 
         expected_data = [
             {
-                'id': product_1.id,
-                'name': 'Toothpaste',
-                'category': {
-                    'name': 'Bathroom',
+                "id": 1,
+                "name": "Toothpaste",
+                "category": {
+                    "name": "Bathroom",
+                    "slug": "bathroom",
+                    "sub_category": None,
+                    "is_sub": False
                 },
-                'image': None,
-                'description': 'Paste for tooth',
-                'price': '5.00',
-                'stock': 5,
-                'available': True
+                "image": None,
+                "description": "Paste for tooth",
+                "price": "5.00",
+                "stock": 5,
+                "available": True
             },
             {
-                'id': product_2.id,
-                'name': 'Towel',
-                'category': {
-                    'name': 'Kitchen'
+                "id": 2,
+                "name": "Towel",
+                "category": {
+                    "name": "Kitchen",
+                    "slug": "kitchen",
+                    "sub_category": None,
+                    "is_sub": False
                 },
-                'image': None,
-                'description': 'Hand towel',
-                'price': '2.00',
-                'stock': 15,
-                'available': True
+                "image": None,
+                "description": "Hand towel",
+                "price": "2.00",
+                "stock": 15,
+                "available": True
             }
         ]
-        # TODO don't work, with category inside
-        self.assertEqual(expected_data, json.dumps(data))
+
+        self.assertEqual(json.dumps(expected_data), json.dumps(data))

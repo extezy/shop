@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # Local apps
     'client',
     'online_shop',
+    'cart',
 ]
 
 MIDDLEWARE = [
@@ -67,6 +68,8 @@ REST_FRAMEWORK = {
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication'
     ],
+
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
 }
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -101,3 +104,5 @@ STATIC_ROOT = public_root('static')
 STATIC_URL = env.str('STATIC_URL', default='static/')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+CART_SESSION_ID = 'cart'
