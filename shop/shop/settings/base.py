@@ -1,13 +1,12 @@
-import environ
+import os.path
 from pathlib import Path
 
-root = environ.Path(__file__) - 4
-env = environ.Env()
-environ.Env.read_env(root('.env'))
+APP_DIR = Path(__file__).resolve(strict=True).parent.parent
+BASE_DIR = APP_DIR.parent
 
-BASE_DIR = Path(__file__).resolve().parent.parent
+DEBUG = os.environ.get('DEBUG')
 
-SECRET_KEY = env.str('SECRET_KEY')
+SECRET_KEY = os.environ.get('SECRET_KEY')
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -97,11 +96,15 @@ USE_L10N = True
 
 USE_TZ = True
 
-public_root = root.path('/shop/public/')
-MEDIA_ROOT = public_root('media')
-MEDIA_URL = env.str('MEDIA_URL', default='media/')
-STATIC_ROOT = public_root('static')
-STATIC_URL = env.str('STATIC_URL', default='static/')
+public_root = APP_DIR / 'public'
+
+STATIC_ROOT = str(BASE_DIR / "staticfiles")
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [str(APP_DIR / "static")]
+
+MEDIA_ROOT = str(APP_DIR / "media")
+MEDIA_URL = "/media/"
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
