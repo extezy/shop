@@ -13,7 +13,9 @@ from shop.settings import CART_SESSION_ID
 
 
 class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
-    queryset = Cart.objects.all().prefetch_related('cart_products')
+    queryset = Cart.objects.all().prefetch_related(
+        Prefetch('cart_products__product', queryset=Product.objects.all())
+    )
     serializer_class = CartSerializer
     permission_classes = [AllowAny, ]
 
@@ -26,8 +28,6 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.method == 'GET':
-            self.queryset = Cart.objects.all().prefetch_related(
-                Prefetch('cart_products__product', queryset=Product.objects.all()))
             session_id = request.session.get(CART_SESSION_ID)
             cart, created = Cart.objects.get_or_create(session_id=session_id)
             request.session[CART_SESSION_ID] = str(cart.session_id)
