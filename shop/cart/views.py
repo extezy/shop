@@ -1,3 +1,4 @@
+from django.db.models import Prefetch, F
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, \
     ListModelMixin
@@ -12,7 +13,7 @@ from shop.settings import CART_SESSION_ID
 
 
 class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
-    queryset = Cart.objects.all()
+    queryset = Cart.objects.all().prefetch_related('cart_products')
     serializer_class = CartSerializer
     permission_classes = [AllowAny, ]
 
@@ -25,14 +26,17 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.method == 'GET':
+            self.queryset = Cart.objects.all().prefetch_related(
+                Prefetch('cart_products__product', queryset=Product.objects.all()))
             session_id = request.session.get(CART_SESSION_ID)
             cart, created = Cart.objects.get_or_create(session_id=session_id)
             request.session[CART_SESSION_ID] = str(cart.session_id)
-            return Response(CartSerializer(cart).data, status=status.HTTP_200_OK)
+            response = super().list(request, *args, **kwargs)
+            return response
 
 
 class CartResetView(CreateModelMixin, GenericViewSet):
-    queryset = Cart.objects.all().select_related('ProductCart')
+    queryset = Cart.objects.all()
     serializer_class = CartSerializer
     permission_classes = [AllowAny, ]
 

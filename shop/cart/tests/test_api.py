@@ -12,7 +12,7 @@ class CartApiTestCase(APITestCase):
     def setUp(self) -> None:
         url = reverse('cart-list')
         response = self.client.get(url)
-        self.session_id = response.data.get('session_id')
+        self.session_id = response.data[0].get('session_id')
 
         self.cart_1 = Cart.objects.get(session_id=self.session_id)
         self.category_1 = Category.objects.create(name='Bathroom', slug='bathroom')
@@ -57,7 +57,20 @@ class CartApiTestCase(APITestCase):
         response = self.client.get(url)
 
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.dumps(expected_data), json.dumps(response.data))
+        self.assertEqual(json.dumps(expected_data), json.dumps(response.data[0]))
+
+    def test_performance(self):
+        product_3 = Product.objects.create(name='New', slug='new', category=self.category_2,
+                                           description='new prod',
+                                           price=5, stock=10, available=True)
+        product_cart_3 = ProductCart.objects.create(cart=self.cart_1, product=product_3)
+
+        url = reverse('cart-list')
+
+        with self.assertNumQueries(8):
+            response = self.client.get(url)
+
+        self.assertEqual(len(response.data[0]), 3)
 
     def test_add_cart_product(self):
         url_post = reverse('product-add-list')
