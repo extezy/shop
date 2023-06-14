@@ -1,6 +1,6 @@
 from .base import *
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
 DATABASES = {
     'default': {
@@ -21,3 +21,5 @@ REST_FRAMEWORK.update({
     )
 }
 )
+
+CELERY_BROKER_URL = 'redis://redis:6379/0'
