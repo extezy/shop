@@ -32,13 +32,14 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
             session_id = request.session.get(settings.CART_SESSION_ID)
             cart_cache = cache.get(session_id)
+
             if cart_cache:
                 response = Response(data=cart_cache, status=status.HTTP_200_OK)
             else:
                 cart, created = Cart.objects.get_or_create(session_id=session_id)
                 request.session[settings.CART_SESSION_ID] = str(cart.session_id)
-                response = super().list(request, *args, **kwargs)
-                cache.set(session_id, response.data, 60 * 60)
+                response = Response(data=CartSerializer(cart).data, status=status.HTTP_200_OK)
+                cache.set(session_id, response.data, 60 * 30)
             return response
 
 
@@ -83,6 +84,7 @@ class ProductCartAddView(CreateModelMixin, GenericViewSet):
             else:
                 product_in_cart = ProductCart.objects.create(cart=cart, product=Product.objects.get(id=product_id))
                 product_in_cart.save()
+
             return Response(ProductCartAddDeleteSerializer(product_in_cart).data, status=status.HTTP_202_ACCEPTED)
 
 

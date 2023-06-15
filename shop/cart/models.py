@@ -1,6 +1,6 @@
 import uuid
-
 from django.db import models
+
 from online_shop.models import Product
 from cart.tasks import set_price
 
@@ -28,9 +28,13 @@ class ProductCart(models.Model):
         return f'{self.product.name}, {self.quantity}'
 
     def save(self, *args, **kwargs):
-        set_price.delay(str(self.cart.session_id))
-        return super().save(*args, **kwargs)
+        result = super().save(*args, **kwargs)
+        session_id = str(self.cart.session_id)
+        set_price.delay(session_id)
+        return result
 
     def delete(self, *args, **kwargs):
-        set_price.delay(str(self.cart.session_id))
-        return super().delete(*args, **kwargs)
+        session_id = str(self.cart.session_id)
+        result = super().delete(*args, **kwargs)
+        set_price.delay(session_id)
+        return result

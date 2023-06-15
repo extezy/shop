@@ -32,7 +32,7 @@ class Category(models.Model):
 class Product(models.Model):
     """Goods in the store"""
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, db_index=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, related_name='products')
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
@@ -44,7 +44,6 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('name',)
-        index_together = (('id', 'slug'),)
 
     def __str__(self):
         return self.name
