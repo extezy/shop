@@ -16,11 +16,20 @@ services:
       - DB_USER=dbuser
       - DB_PASS=pass
 
+    restart: always
+
     env_file:
       - /.env
 
+    healthcheck:
+      test: "curl -s localhost:8000/api/healthcheck"
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
     depends_on:
-      - database
+      database:
+        condition: service_healthy
 
   database:
     image: postgres:15.3-alpine3.18
@@ -29,9 +38,22 @@ services:
       - POSTGRES_USER=dbuser
       - POSTGRES_PASSWORD=pass
 
+    restart: always
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d $${POSTGRES_DB} -U $${POSTGRES_USER}" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   redis:
     image: redis:7.0.11-alpine
     hostname: redis
+    restart: always
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
 
   worker:
     build:
@@ -45,9 +67,12 @@ services:
     links:
       - redis
     depends_on:
-      - redis
-      - web-app
-      - database
+      database:
+        condition: service_healthy
+      web-app:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
 
     environment:
       - DB_HOST=database
@@ -57,6 +82,9 @@ services:
 
     env_file:
       - /.env
+
+    deploy:
+      replicas: 2
 
   flower:
     build:
@@ -69,7 +97,8 @@ services:
     links:
       - redis
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     ports:
       - "5555:5555"
     env_file:

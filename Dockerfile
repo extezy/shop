@@ -1,6 +1,6 @@
 FROM python:3.9-alpine3.17
 
-RUN apk add postgresql-client build-base postgresql-dev
+RUN apk add postgresql-client build-base postgresql-dev curl
 RUN adduser --disabled-password service-user
 
 COPY requirements.txt /temp/requirements.txt

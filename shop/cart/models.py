@@ -28,9 +28,9 @@ class ProductCart(models.Model):
         return f'{self.product.name}, {self.quantity}'
 
     def save(self, *args, **kwargs):
-        set_price.delay(self.cart.session_id)
+        set_price.delay(str(self.cart.session_id))
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):
-        set_price.delay(self.cart.session_id)
+        set_price.delay(str(self.cart.session_id))
         return super().delete(*args, **kwargs)

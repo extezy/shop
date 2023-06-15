@@ -7,9 +7,10 @@ from cart.serializers import CartSerializer, ProductCartAddDeleteSerializer
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework import status
+from django.core.cache import cache
 
 from online_shop.models import Product
-from shop.settings import CART_SESSION_ID
+from django.conf import settings
 
 
 class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
@@ -21,17 +22,23 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.method == 'POST':
-            session_id = request.session.get(CART_SESSION_ID)
+            session_id = request.session.get(settings.CART_SESSION_ID)
             cart, created = Cart.objects.get_or_create(session_id=session_id)
-            request.session[CART_SESSION_ID] = str(cart.session_id)
+            request.session[settings.CART_SESSION_ID] = str(cart.session_id)
             return Response(CartSerializer(cart).data, status=status.HTTP_201_CREATED)
 
     def list(self, request, *args, **kwargs):
         if request.method == 'GET':
-            session_id = request.session.get(CART_SESSION_ID)
-            cart, created = Cart.objects.get_or_create(session_id=session_id)
-            request.session[CART_SESSION_ID] = str(cart.session_id)
-            response = super().list(request, *args, **kwargs)
+
+            session_id = request.session.get(settings.CART_SESSION_ID)
+            cart_cache = cache.get(session_id)
+            if cart_cache:
+                response = Response(data=cart_cache, status=status.HTTP_200_OK)
+            else:
+                cart, created = Cart.objects.get_or_create(session_id=session_id)
+                request.session[settings.CART_SESSION_ID] = str(cart.session_id)
+                response = super().list(request, *args, **kwargs)
+                cache.set(session_id, response.data, 60 * 60)
             return response
 
 
@@ -42,7 +49,7 @@ class CartResetView(CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.method == 'POST':
-            session_id = request.session.get(CART_SESSION_ID)
+            session_id = request.session.get(settings.CART_SESSION_ID)
             if session_id:
                 cart = Cart.objects.get(session_id=session_id)
                 cart.reset_products()
@@ -59,9 +66,9 @@ class ProductCartAddView(CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.method == 'POST':
-            session_id = request.session.get(CART_SESSION_ID)
+            session_id = request.session.get(settings.CART_SESSION_ID)
             cart, created = Cart.objects.get_or_create(session_id=session_id)
-            request.session[CART_SESSION_ID] = str(cart.session_id)
+            request.session[settings.CART_SESSION_ID] = str(cart.session_id)
 
             product_id = request.data.get('product_id')
             if not product_id:
@@ -86,9 +93,9 @@ class ProductCartRemoveView(CreateModelMixin, GenericViewSet):
 
     def create(self, request, *args, **kwargs):
         if request.method == 'POST':
-            session_id = request.session.get(CART_SESSION_ID)
+            session_id = request.session.get(settings.CART_SESSION_ID)
             cart, created = Cart.objects.get_or_create(session_id=session_id)
-            request.session[CART_SESSION_ID] = str(cart.session_id)
+            request.session[settings.CART_SESSION_ID] = str(cart.session_id)
 
             product_id = request.data.get('product_id')
             if not product_id:

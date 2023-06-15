@@ -9,6 +9,7 @@ from online_shop.serializers import ProductSerializer, CategorySerializer
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.reverse import reverse
 
 
@@ -53,3 +54,10 @@ def api_root(request, format=None):
         'add_cart_product': reverse('product-add-list', request=request, format=format),
         'remove_cart_product': reverse('product-remove-list', request=request, format=format),
     })
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def healthcheck(requset, format=None):
+    """ Healthcheck """
+    return Response(status=status.HTTP_200_OK)
