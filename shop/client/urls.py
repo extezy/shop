@@ -10,9 +10,8 @@ client_router = routers.DefaultRouter()
 client_router.register(r'api/client', ClientView)
 
 urlpatterns = [
-    path('api/token/login/', obtain_auth_token),
-    path('api/token/logout/', client.views.logout),
-    path('api/base-auth', include('rest_framework.urls')),
+    path('api/token/login/', obtain_auth_token, name='token-login'),
+    path('api/token/logout/', client.views.logout, name='token-logout'),
 ]
 
 urlpatterns += client_router.urls
