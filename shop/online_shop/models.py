@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 class Category(models.Model):
     """Product category"""
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True, unique=True)
+    slug = models.SlugField(max_length=200, db_index=True, unique=True, null=True, blank=True)
 
     sub_category = models.ForeignKey(
         'self', on_delete=models.PROTECT,
@@ -22,9 +22,10 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('shop:product_detail', kwargs={'slug':self.slug})
+        return reverse('shop:product_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
+        """ Autosave slug field """
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
@@ -52,5 +53,6 @@ class Product(models.Model):
         return reverse('shop:product_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
+        """ Autosave slug field """
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)

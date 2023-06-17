@@ -1,7 +1,5 @@
-from django.db.models import Prefetch, F
 from rest_framework.viewsets import GenericViewSet
-from rest_framework.mixins import CreateModelMixin, RetrieveModelMixin, UpdateModelMixin, DestroyModelMixin, \
-    ListModelMixin
+from rest_framework.mixins import CreateModelMixin, ListModelMixin
 from cart.models import Cart, ProductCart
 from cart.serializers import CartSerializer, ProductCartAddDeleteSerializer
 from rest_framework.permissions import AllowAny
@@ -15,7 +13,7 @@ from django.conf import settings
 
 class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
     queryset = Cart.objects.all().prefetch_related(
-        Prefetch('cart_products__product', queryset=Product.objects.all())
+        'cart_products__product'
     )
     serializer_class = CartSerializer
     permission_classes = [AllowAny, ]
@@ -29,18 +27,25 @@ class CartView(CreateModelMixin, ListModelMixin, GenericViewSet):
 
     def list(self, request, *args, **kwargs):
         if request.method == 'GET':
-
             session_id = request.session.get(settings.CART_SESSION_ID)
             cart_cache = cache.get(session_id)
 
             if cart_cache:
-                response = Response(data=cart_cache, status=status.HTTP_200_OK)
+                queryset = cart_cache
             else:
                 cart, created = Cart.objects.get_or_create(session_id=session_id)
                 request.session[settings.CART_SESSION_ID] = str(cart.session_id)
-                response = Response(data=CartSerializer(cart).data, status=status.HTTP_200_OK)
-                cache.set(session_id, response.data, 60 * 30)
-            return response
+
+                queryset = self.filter_queryset(self.get_queryset().filter(session_id=session_id))
+                cache.set(session_id, queryset, 60 * 30)
+
+            page = self.paginate_queryset(queryset)
+            if page is not None:
+                serializer = self.get_serializer(page, many=True)
+                return self.get_paginated_response(serializer.data)
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Response(serializer.data)
 
 
 class CartResetView(CreateModelMixin, GenericViewSet):

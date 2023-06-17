@@ -1,8 +1,7 @@
 from rest_framework import routers
 
 
-from cart.views import *
-from django.urls import path, include
+from cart.views import CartView, CartResetView, ProductCartAddView, ProductCartRemoveView
 
 
 client_router = routers.DefaultRouter()

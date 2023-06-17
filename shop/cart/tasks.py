@@ -14,6 +14,11 @@ def set_price(session_id):
     with transaction.atomic():
         cart = Cart.objects.select_for_update().get(session_id=session_id)
         cart_products = cart.cart_products.all()
-        total_cost = sum([cart_product.quantity * cart_product.product.price for cart_product in cart_products])
+        if cart_products:
+            total_cost = sum(
+                cart_product.quantity * cart_product.product.price for cart_product in cart_products
+            )
+        else:
+            total_cost = 0
         cart.total_cost = total_cost
         cart.save()

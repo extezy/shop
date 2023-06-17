@@ -10,23 +10,45 @@ from online_shop.serializers import ProductSerializer
 
 class ProductApiTestCase(APITestCase):
     def setUp(self):
-        self.superuser = User.objects.create_superuser(username='super', password='super', email='manson@google.com',
-                                                    first_name='Vasya',
-                                                    last_name='Entrop')
+        self.superuser = User.objects.create_superuser(
+            username='super',
+            password='super',
+            email='manson@google.com',
+            first_name='Vasya',
+            last_name='Entrop'
+        )
         self.category_1 = Category.objects.create(name='Bathroom', slug='bathroom')
 
-        self.product_1 = Product.objects.create(name='Toothpaste', slug='toothpaste', category=self.category_1,
-                                                description='Paste for tooth',
-                                                price=5, stock=3, available=True)
+        self.product_1 = Product.objects.create(
+            name='Toothpaste',
+            slug='toothpaste',
+            category=self.category_1,
+            description='Paste for tooth',
+            price=5,
+            stock=3,
+            available=True
+        )
 
         self.category_2 = Category.objects.create(name='Kitchen', slug='kitchen')
-        self.product_2 = Product.objects.create(name='Kitchen Towel', slug='towel', category=self.category_2,
-                                                description='Hand towel',
-                                                price=2, stock=15, available=True)
+        self.product_2 = Product.objects.create(
+            name='Kitchen Towel',
+            slug='towel',
+            category=self.category_2,
+            description='Hand towel',
+            price=2,
+            stock=15,
+            available=True
+        )
 
-        self.product_3 = Product.objects.create(name='Knife', slug='knife', category=self.category_2,
-                                                description='Kitchen knife',
-                                                price=5, stock=1, available=True)
+        self.product_3 = Product.objects.create(
+            name='Knife',
+            slug='knife',
+            category=self.category_2,
+            description='Kitchen knife',
+            price=5,
+            stock=1,
+            available=True
+        )
 
         self.url_list = reverse('product-list')
 
@@ -45,9 +67,15 @@ class ProductApiTestCase(APITestCase):
         self.assertEqual(len(response.data), 3)
 
         category = Category.objects.create(name='Test', slug='test')
-        Product.objects.create(name='Towel', slug='towel', category=category,
-                               description='Hand towel',
-                               price=20, stock=10, available=True)
+        Product.objects.create(
+            name='Towel',
+            slug='towel',
+            category=category,
+            description='Hand towel',
+            price=20,
+            stock=10,
+            available=True
+        )
 
         with self.assertNumQueries(1):
             response = self.client.get(self.url_list)

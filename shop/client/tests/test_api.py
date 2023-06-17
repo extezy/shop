@@ -10,13 +10,36 @@ from client.serializers import ClientSerializer
 
 class ClientsApiTestCase(APITestCase):
     def setUp(self):
-        self.user_1 = User.objects.create_superuser(username='manson', password='12345', email='manson@google.com', first_name='Vasya',
-                                          last_name='Entrop')
-        self.client_1 = Client.objects.create(user=self.user_1, gender='M', age=27, phone='+75642185479', full_address='Moscow')
+        self.user_1 = User.objects.create_superuser(
+            username='manson',
+            password='12345',
+            email='manson@google.com',
+            first_name='Vasya',
+            last_name='Entrop'
+        )
+        self.client_1 = Client.objects.create(
+            user=self.user_1,
+            gender='M',
+            age=27,
+            phone='+75642185479',
+            full_address='Moscow'
+        )
 
-        self.user_2 = User.objects.create_user(username='sara', password='54321', email='sara@google.com', first_name='Sara',
-                                          last_name='Maddison', is_staff=True)
-        self.client_2 = Client.objects.create(user=self.user_2, gender='F', age=30, phone='+72657841598', full_address='Paris')
+        self.user_2 = User.objects.create_user(
+            username='sara',
+            password='54321',
+            email='sara@google.com',
+            first_name='Sara',
+            last_name='Maddison',
+            is_staff=True
+        )
+        self.client_2 = Client.objects.create(
+            user=self.user_2,
+            gender='F',
+            age=30,
+            phone='+72657841598',
+            full_address='Paris'
+        )
         self.url = reverse('client-list')
 
         self.drf_login_in_client = APIClient()
@@ -58,8 +81,12 @@ class ClientsApiTestCase(APITestCase):
 
         self.assertEqual(len(response.data), 2)
 
-        user_3 = User.objects.create_user(username='nikon', email='nikon@google.com', first_name='Nik',
-                                          last_name='Maddison')
+        user_3 = User.objects.create_user(
+            username='nikon',
+            email='nikon@google.com',
+            first_name='Nik',
+            last_name='Maddison'
+        )
         Client.objects.create(user=user_3, gender='M', age=31, phone='+72654851598', full_address='Boston')
 
         with self.assertNumQueries(2):

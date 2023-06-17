@@ -1,6 +1,5 @@
 import uuid
 from django.db import models
-
 from online_shop.models import Product
 from cart.tasks import set_price
 
@@ -16,6 +15,7 @@ class Cart(models.Model):
     def reset_products(self):
         for product in self.cart_products.all():
             product.delete()
+        self.total_cost = 0
 
 
 class ProductCart(models.Model):
@@ -38,3 +38,5 @@ class ProductCart(models.Model):
         result = super().delete(*args, **kwargs)
         set_price.delay(session_id)
         return result
+
+# post_init.connect(update_cart_cost, sender=ProductCart)
