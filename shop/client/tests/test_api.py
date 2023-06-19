@@ -24,7 +24,6 @@ class ClientsApiTestCase(APITestCase):
             phone='+75642185479',
             full_address='Moscow'
         )
-
         self.user_2 = User.objects.create_user(
             username='sara',
             password='54321',

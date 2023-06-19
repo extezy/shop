@@ -47,7 +47,7 @@ class ProductView(ModelViewSet):
 def api_root(request, format=None):
     """Root api point"""
     return Response({
-        'base_auth': reverse('base-auth', request=request, format=format),
+        'social-auth': reverse('social-auth', request=request, format=format),
         'token_login': reverse('token-login', request=request, format=format),
         'token_logout': reverse('token-logout', request=request, format=format),
 
@@ -64,6 +64,11 @@ def api_root(request, format=None):
 
 @api_view(['GET'])
 @permission_classes([AllowAny])
-def healthcheck(requset, format=None):
+def healthcheck(request, format=None):
     """ Healthcheck """
     return Response(status=status.HTTP_200_OK)
+
+
+from django.shortcuts import render
+def auth(request):
+    return render(request, 'oauth.html')

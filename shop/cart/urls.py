@@ -10,6 +10,7 @@ client_router.register(r'api/reset_cart', CartResetView, basename='reset')
 client_router.register(r'api/add_cart_product', ProductCartAddView, basename='product-add')
 client_router.register(r'api/remove_cart_product', ProductCartRemoveView, basename='product-remove')
 
+
 urlpatterns = [
 ]
 

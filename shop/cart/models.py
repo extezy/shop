@@ -2,6 +2,7 @@ import uuid
 from django.db import models
 from online_shop.models import Product
 from cart.tasks import set_price
+from orders.models import Order, OrderItem
 
 
 class Cart(models.Model):
@@ -16,6 +17,17 @@ class Cart(models.Model):
         for product in self.cart_products.all():
             product.delete()
         self.total_cost = 0
+
+    def count_products(self):
+        return self.cart_products.all().count()
+
+    def cart_products_to_order_items(self, order: Order):
+        for product_cart in self.cart_products.all():
+            OrderItem.objects.create(
+                order=order,
+                product=product_cart.product,
+                quantity=product_cart.quantity
+            )
 
 
 class ProductCart(models.Model):
@@ -38,5 +50,3 @@ class ProductCart(models.Model):
         result = super().delete(*args, **kwargs)
         set_price.delay(session_id)
         return result
-
-# post_init.connect(update_cart_cost, sender=ProductCart)
