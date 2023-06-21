@@ -13,6 +13,7 @@ class ProductSerializer(serializers.ModelSerializer):
     category = CategorySerializer(required=False)
 
     class Meta:
+        ref_name = 'ShopProductSerializer'
         model = Product
         fields = ('id', 'name', 'category', 'image',
                   'description', 'price', 'stock',

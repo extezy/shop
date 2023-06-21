@@ -22,7 +22,7 @@ class ProductSerializerTestCase(TestCase):
 
         expected_data = [
             {
-                "id": 1,
+                "id": product_1.id,
                 "name": "Toothpaste",
                 "category": {
                     "name": "Bathroom",
@@ -37,7 +37,7 @@ class ProductSerializerTestCase(TestCase):
                 "available": True
             },
             {
-                "id": 2,
+                "id": product_2.id,
                 "name": "Towel",
                 "category": {
                     "name": "Kitchen",

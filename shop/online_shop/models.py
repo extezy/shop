@@ -6,7 +6,7 @@ from django.template.defaultfilters import slugify
 class Category(models.Model):
     """Product category"""
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True, unique=True)
+    slug = models.SlugField(max_length=200, db_index=True, unique=True, null=True, blank=True)
 
     sub_category = models.ForeignKey(
         'self', on_delete=models.PROTECT,
@@ -22,9 +22,10 @@ class Category(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('shop:product_detail', kwargs={'slug':self.slug})
+        return reverse('shop:product_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
+        """ Autosave slug field """
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
 
@@ -32,7 +33,7 @@ class Category(models.Model):
 class Product(models.Model):
     """Goods in the store"""
     name = models.CharField(max_length=200, db_index=True)
-    slug = models.SlugField(max_length=200, db_index=True)
+    slug = models.SlugField(max_length=200, db_index=True, null=True, blank=True)
     category = models.ForeignKey(Category, on_delete=models.PROTECT, null=True, blank=True, related_name='products')
     image = models.ImageField(upload_to='products/%Y/%m/%d', blank=True)
     description = models.TextField(blank=True)
@@ -44,7 +45,6 @@ class Product(models.Model):
 
     class Meta:
         ordering = ('name',)
-        index_together = (('id', 'slug'),)
 
     def __str__(self):
         return self.name
@@ -53,5 +53,6 @@ class Product(models.Model):
         return reverse('shop:product_detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
+        """ Autosave slug field """
         self.slug = slugify(self.name)
         return super().save(*args, **kwargs)

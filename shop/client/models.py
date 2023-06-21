@@ -10,10 +10,10 @@ class Client(models.Model):
     )
 
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES)
-    age = models.PositiveSmallIntegerField()
-    phone = PhoneNumberField()
-    full_address = models.CharField(max_length=100)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, null=True, blank=True)
+    age = models.PositiveSmallIntegerField(null=True, blank=True)
+    phone = PhoneNumberField(null=True, blank=True)
+    full_address = models.CharField(max_length=100, null=True, blank=True)
 
     class Meta:
         ordering = ('user',)

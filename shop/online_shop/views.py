@@ -9,6 +9,7 @@ from online_shop.serializers import ProductSerializer, CategorySerializer
 
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
+from rest_framework import status
 from rest_framework.reverse import reverse
 
 
@@ -46,10 +47,28 @@ class ProductView(ModelViewSet):
 def api_root(request, format=None):
     """Root api point"""
     return Response({
+        'social-auth': reverse('social-auth', request=request, format=format),
+        'token_login': reverse('token-login', request=request, format=format),
+        'token_logout': reverse('token-logout', request=request, format=format),
+
         'product': reverse('product-list', request=request, format=format),
+
         'clients': reverse('client-list', request=request, format=format),
+
         'cart': reverse('cart-list', request=request, format=format),
-        'reset_cart': reverse('reset-list', request=request, format=format),
         'add_cart_product': reverse('product-add-list', request=request, format=format),
         'remove_cart_product': reverse('product-remove-list', request=request, format=format),
+        'reset_cart': reverse('reset-list', request=request, format=format),
     })
+
+
+@api_view(['GET'])
+@permission_classes([AllowAny])
+def healthcheck(request, format=None):
+    """ Healthcheck """
+    return Response(status=status.HTTP_200_OK)
+
+
+from django.shortcuts import render
+def auth(request):
+    return render(request, 'oauth.html')

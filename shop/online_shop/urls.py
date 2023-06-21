@@ -10,6 +10,7 @@ online_shop_router.register(r'api/category', CategoryView)
 
 urlpatterns = [
     path('', online_shop.views.api_root),
+    path(r'api/healthcheck', online_shop.views.healthcheck)
 ]
 
 urlpatterns += online_shop_router.urls

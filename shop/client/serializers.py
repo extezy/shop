@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from client.models import Client
+from django.contrib.auth.models import User
 
 
 class ClientSerializer(serializers.ModelSerializer):
