@@ -2,7 +2,7 @@
 
 ---
 
-### Swagger:  "hostname:8000/swagger-ui/"
+### Swagger:  "hostname:8000/swagger/"
 
 ---
 ### Docker start:
