@@ -5,6 +5,7 @@ from online_shop.models import Product
 
 class ProductSerializer(serializers.ModelSerializer):
     class Meta:
+        ref_name = 'CartProductSerializer'
         model = Product
         fields = ['id', 'name', 'price']
 

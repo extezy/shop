@@ -16,11 +16,13 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Other apps
+    'drf_yasg',
     'rest_framework',
     'rest_framework.authtoken',
     'phonenumber_field',
     'django_filters',
     'social_django',
+
     # Local apps
     'client',
     'online_shop',

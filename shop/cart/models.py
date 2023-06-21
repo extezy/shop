@@ -46,6 +46,7 @@ class ProductCart(models.Model):
         return result
 
     def delete(self, *args, **kwargs):
+        """ Delete object and recalculate cart"""
         session_id = str(self.cart.session_id)
         result = super().delete(*args, **kwargs)
         set_price.delay(session_id)
